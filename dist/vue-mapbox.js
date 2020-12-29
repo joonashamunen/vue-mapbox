@@ -1,4 +1,4 @@
-import promisify from "map-promisified";
+import promisify from 'map-promisified';
 
 var withEventsMixin = {
   methods: {
@@ -307,7 +307,7 @@ const watchers = {
 
 function watcher(prop, callback, next, prev) {
   if (this.initial) return;
-  if (this.$listeners[`update:${prop}`]) {
+  if (this.$attrs[`update:${prop}`]) {
     if (this.propsIsUpdating[prop]) {
       this._watcher.active = false;
       this.$nextTick(() => {
@@ -383,7 +383,7 @@ var withPrivateMethods = {
       ];
       syncedProps.forEach(({ events, prop, getter }) => {
         events.forEach(event => {
-          if (this.$listeners[`update:${prop}`]) {
+          if (this.$attrs[`update:${prop}`]) {
             this.map.on(event, this.$_updateSyncedPropsFabric(prop, getter));
           }
         });
@@ -410,7 +410,7 @@ var withPrivateMethods = {
     },
 
     $_bindMapEvents(events) {
-      Object.keys(this.$listeners).forEach(eventName => {
+      Object.keys(this.$attrs).forEach(eventName => {
         if (events.includes(eventName)) {
           this.map.on(eventName, this.$_emitMapEvent);
         }
@@ -521,7 +521,7 @@ var GlMap = {
     this.$_containerVNode = null;
     this.mapboxPromise = this.mapboxGl
       ? Promise.resolve(this.mapboxGl)
-      : import("mapbox-gl");
+      : import('mapbox-gl');
   },
 
   mounted() {
@@ -576,7 +576,7 @@ var withSelfEventsMixin = {
      * so we treat them as 'self' events of these objects
      */
     $_bindSelfEvents(events, emitter) {
-      Object.keys(this.$listeners).forEach(eventName => {
+      Object.keys(this.$attrs).forEach(eventName => {
         if (events.includes(eventName)) {
           emitter.on(eventName, this.$_emitSelfEvent);
         }
@@ -845,7 +845,7 @@ var Marker = {
     }
     this.marker = new this.mapbox.Marker(markerOptions);
 
-    if (this.$listeners["update:coordinates"]) {
+    if (this.$attrs["update:coordinates"]) {
       this.marker.on("dragend", event => {
         let newCoordinates;
         if (this.coordinates instanceof Array) {
@@ -882,7 +882,7 @@ var Marker = {
     },
 
     $_bindMarkerDOMEvents() {
-      Object.keys(this.$listeners).forEach(key => {
+      Object.keys(this.$attrs).forEach(key => {
         if (Object.values(markerDOMEvents).includes(key)) {
           this.marker._element.addEventListener(key, event => {
             this.$_emitSelfEvent(event);
@@ -1299,7 +1299,7 @@ var layerMixin = {
     },
 
     $_bindLayerEvents(events) {
-      Object.keys(this.$listeners).forEach(eventName => {
+      Object.keys(this.$attrs).forEach(eventName => {
         if (events.includes(eventName)) {
           this.map.on(eventName, this.layerId, this.$_emitLayerMapEvent);
         }
@@ -1925,24 +1925,4 @@ const MglRasterLayer = RasterLayer;
 const MglMarker = Marker;
 const MglPopup = Popup;
 
-export {
-  $helpers,
-  MglAttributionControl,
-  MglCanvasLayer,
-  MglFullscreenControl,
-  MglGeojsonLayer,
-  MglGeolocateControl,
-  MglImageLayer,
-  MglMap,
-  MglMarker,
-  MglNavigationControl,
-  MglPopup,
-  MglRasterLayer,
-  MglScaleControl,
-  MglVectorLayer,
-  MglVideoLayer,
-  asControl,
-  asLayer,
-  withEvents,
-  withSelfEvents
-};
+export { $helpers, MglAttributionControl, MglCanvasLayer, MglFullscreenControl, MglGeojsonLayer, MglGeolocateControl, MglImageLayer, MglMap, MglMarker, MglNavigationControl, MglPopup, MglRasterLayer, MglScaleControl, MglVectorLayer, MglVideoLayer, asControl, asLayer, withEvents, withSelfEvents };
